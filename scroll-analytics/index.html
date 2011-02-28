@@ -112,9 +112,7 @@ $(document).ready(function() {
 		event.stopPropagation();
 	}, {
 		triggerOnce: true,
-		offset: function() {
-			return $.waypoints('viewportHeight') - $(this).outerHeight();
-		}
+		offset: 'bottom-in-view'
 	});
 	
 	$('article').waypoint(function(event, direction) {
