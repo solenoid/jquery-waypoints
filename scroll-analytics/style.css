@@ -108,6 +108,7 @@ article {
 #wrapper {
 	width:460px;
 	margin:0 auto;
+	overflow:hidden;
 }
 
 #lcol {

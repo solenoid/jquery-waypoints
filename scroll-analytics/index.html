@@ -5,6 +5,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Scroll Analytics with jQuery Waypoints</title>
 	<meta name="description" content="An example of how to use the jQuery Waypoints plugin to track ad views more accurately and respond to engaged users when they reach the end of content">
+	<meta name="viewport" content="width=480">
 	<link rel="stylesheet" href="style.css" type="text/css" media="all">
 	<script src="../modernizr.custom.js"></script>
 </head>
@@ -80,7 +81,7 @@
 </div>
 
 <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.4.min.js"></script>
-<script src="../waypoints.min.js"></script>
+<script src="../waypoints.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -112,7 +113,7 @@ $(document).ready(function() {
 	}, {
 		triggerOnce: true,
 		offset: function() {
-			return $(window).height() - $(this).outerHeight();
+			return $.waypoints('viewportHeight') - $(this).outerHeight();
 		}
 	});
 	
@@ -120,7 +121,7 @@ $(document).ready(function() {
 		$('#article-finished').toggleClass('hiding', direction === "up");
 	}, {
 		offset: function() {
-			return $(window).height() - $(this).height();
+			return $.waypoints('viewportHeight') - $(this).height();
 		}
 	});
 });
