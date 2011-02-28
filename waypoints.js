@@ -301,13 +301,20 @@ Support:
 
 	// The bottom of the element is in view
 	offset: function() {
-	   return $(window).height() - $(this).height();
+	   return $.waypoints('viewportHeight') - $(this).outerHeight();
 	}
 	
 	Offset can take a function, which must return a number of pixels from the top of
 	the window. The this value will always refer to the raw HTML element of the
 	waypoint. As with % values, functions are recalculated automatically when the
 	window resizes. For more on recalculating offsets, see $.waypoints('refresh').
+	
+	An offset value of 'bottom-in-view' will act as an alias for the function in the
+	example above, as this is a common usage.
+	
+	offset: 'bottom-in-view'
+	
+	You can see this alias in use on the Scroll Analytics example page.
 
 	The triggerOnce flag, if true, will destroy the waypoint after the first trigger.
 	This is just a shortcut for calling .waypoint('destroy') within the waypoint
@@ -383,8 +390,9 @@ Support:
 		/*
 		jQuery.waypoints('viewportHeight')
 		
-		This will return the height of the viewport, adjusting for a bug in jQuery
-		where iOS devices may not return the correct window height.
+		This will return the height of the viewport, adjusting for inconsistencies
+		that come with calling $(window).height() in iOS. Recommended for use
+		within any offset functions.
 		*/
 		viewportHeight: function() {
 			return (window.innerHeight ? window.innerHeight : $w.height());

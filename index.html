@@ -38,11 +38,11 @@
 				<p>Waypoints makes a solid base for modern UI patterns that depend on a user&rsquo;s scroll position on the page.  Take a look at a few <a href="#examples">examples</a>.</p>
 				
 				<div class="rcol">
-					<a href="https://github.com/imakewebthings/jquery-waypoints/zipball/v1.0" class="download">
+					<a href="https://github.com/imakewebthings/jquery-waypoints/zipball/v1.0.1" class="download">
 						Download
-						<span class="version">v1.0</span>
+						<span class="version">v1.0.1</span>
 					</a>
-					<p class="sizes">1.1kB min+gzip, 2.4kB minified, 14.3kB full source</p>
+					<p class="sizes">1.2kB min+gzip, 2.7kB minified, 15.4kB full source</p>
 					<div class="meta">
 						<p>Waypoints is dual licensed under the <a href="https://github.com/imakewebthings/jquery-waypoints/blob/master/MIT-license.txt">MIT</a> and <a href="https://github.com/imakewebthings/jquery-waypoints/blob/master/GPL-license.txt">GPL</a> licenses.  You can fork the project or report any issues in the <a href="https://github.com/imakewebthings/jquery-waypoints">GitHub repository</a>.</p>
 						<p>Waypoints has been tested with jQuery versions 1.4+ in IE6+, FF3+, Safari 4+, and Chrome 6+.</p>
@@ -101,6 +101,7 @@
 					<ul>
 						<li><a href="#waypoints-noparam">$.waypoints()</a> &mdash; Get all waypoints.</li>
 						<li><a href="#waypoints-refresh">$.waypoints('refresh')</a> &mdash; Recalculate all waypoint positions.</li>
+						<li><a href="#waypoints-viewport-height">$.waypoints('viewportHeight')</a> &mdash; Get the viewport height, iOS compatible.</li>
 						<li><a href="#waypoints-settings">$.waypoints.settings</a> &mdash; Waypoints plugin settings.</li>
 					</ul>
 				</li>
@@ -194,10 +195,17 @@
 				
 				<pre><code><span class="comment">// The bottom of the element is in view</span>
 <span class="key">offset</span>: <span class="kw">function</span>() {
-   <span class="kw">return</span> <span class="fn">$</span>(window).<span class="fn">height</span>() - <span class="fn">$</span>(this).<span class="fn">height</span>();
+   <span class="kw">return</span> $.<span class="fn">waypoints</span>(<span class="str">'viewportHeight'</span>) - <span class="fn">$</span>(this).<span class="fn">outerHeight</span>();
 }</code></pre>
 
 				<p>Offset can take a function, which must return a number of pixels from the top of the window.  The <code>this</code> value will always refer to the raw HTML element of the waypoint.  As with % values, functions are recalculated automatically when the window resizes.  For more on recalculating offsets, see <a href="#waypoints-refresh">$.waypoints('refresh')</a>.</p>
+				
+				<p>An offset value of <code>'bottom-in-view'</code> will act as an alias for the function in the example above, as this is a common usage.</p>
+				
+				<pre><code><span class="key">offset</span>: <span class="str">'bottom-in-view'</span>
+</code></pre>
+
+				<p>You can see this alias in use on the <a href="./scroll-analytics/">scroll analytics</a> example page.</p>
 				
 				<p>The <code>triggerOnce</code> flag, if true, will destroy the waypoint after the first trigger.  This is just a shortcut for calling <a href="#waypoint-destroy">.waypoint('destroy')</a> within the waypoint handler.  This is useful in situations such as <a href="./scroll-analytics/">scroll analytics</a>, where you only want to record an event once for each page visit.</p>
 			</section>
@@ -219,13 +227,20 @@
 });
 console.<span class="fn">log</span>($.<span class="fn">waypoints</span>());</code></pre>
 
-				The example above would log a jQuery object containing all <code>.post</code> and <code>.ad-unit</code> elements.
+				<p>The example above would log a jQuery object containing all <code>.post</code> and <code>.ad-unit</code> elements.</p>
 			
 				<div class="signature">
 					<h3 id="waypoints-refresh">$.waypoints('refresh')</h3>
 				</div>
 				
 				<p>This will force a recalculation of each waypoint&rsquo;s trigger point based on its <code>offset</code> option.  This is called automatically whenever the window is resized, new waypoints are added, or a waypoint&rsquo;s options are modified.  If your project is changing the DOM or page layout without doing one of these things, you may want to manually call this refresh.</p>
+				
+				<div class="signature">
+					<h3 id="waypoints-viewport-height">$.waypoints('viewportHeight')</h3>
+					<p class="returns">Returns: number</p>
+				</div>
+				
+				<p>This will return the height of the viewport, adjusting for inconsistencies that come with calling <code>$(window).height()</code> in iOS. Recommended for use within any offset functions.</p>
 			
 				<div class="signature">
 					<h3 id="waypoints-settings">$.waypoints.settings</h3>
