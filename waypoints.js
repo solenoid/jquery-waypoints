@@ -59,9 +59,10 @@ Support:
 		handler
 			function, optional
 			A callback function called when the user scrolls past the element.
-			The function signature is function(event, direction) where event is
-			a standard jQuery Event Object and direction is a string, either 'down'
-			or 'up' indicating which direction the user is scrolling.
+			The function signature is function(event, direction, elapsed) where event
+			is a standard jQuery Event Object, direction is a string, either 'down'
+			or 'up' indicating which direction the user is scrolling, and elapsed is
+			the elapsed milliseconds since the waypoint was created.
 			
 		options
 			object, optional
@@ -89,12 +90,15 @@ Support:
 		waypoint.reached, and can do so by passing a handler as the first argument to
 		.waypoint:
 
-		someElements.waypoint(function(event, direction) {
+		someElements.waypoint(function(event, direction, elapsed) {
 		   if (direction === 'down') {
 		      // do this on the way down
 		   }
 		   else {
 		      // do this on the way back up through the waypoint
+		   }
+		   if (elapsed > 5000) {
+		      // do this if 5 seconds has passed since this waypoint was made
 		   }
 		});
 			
@@ -102,7 +106,7 @@ Support:
 		the top of the element hits the top of the window. We can pass .waypoint an
 		options object to customize things:
 
-		someElements.waypoint(function(event, direction) {
+		someElements.waypoint(function(event, direction, elapsed) {
 		   // do something amazing
 		}, {
 		   offset: '50%'  // middle of the page
@@ -140,6 +144,7 @@ Support:
 					waypoints.push({
 						element: $this,
 						offset: $this.offset().top,
+						startTime: (new Date).getTime(),
 						options: opts
 					});
 				}
@@ -203,8 +208,10 @@ Support:
 	For the waypoint and direction passed in, trigger the waypoint.reached
 	event and deal with the triggerOnce option.
 	*/
-	function triggerWaypoint(way, dir) {
-		way.element.trigger(eventName, dir)
+	function triggerWaypoint(way, extraParams) {
+		var elapsedTime = (new Date).getTime() - way.startTime;
+		extraParams.push(elapsedTime);
+		way.element.trigger(eventName, extraParams);
 		if (way.options.triggerOnce) {
 			way.element.waypoint('destroy');
 		}
@@ -410,7 +417,7 @@ Support:
 		elements.
 
 		$('.post').waypoint();
-		$('.ad-unit').waypoint(function(event, direction) {
+		$('.ad-unit').waypoint(function(event, direction, elapsed) {
 		   // Passed an ad unit
 		});
 		console.log($.waypoints());
